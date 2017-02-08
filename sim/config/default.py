@@ -110,7 +110,7 @@ if gui:
 # VERILATOR simulator
 
 define['simulator']['verilator']['options'] = 'MAKE_VARIABLE'
-cfg['simulator']['verilator']['options'] = ' --cc --error-limit 2000'
+cfg['simulator']['verilator']['options'] = ' --cc --error-limit 2000 -Wno-fatal'
 
 define['simulator']['verilator']['warnings'] = 'MAKE_VARIABLE'
 cfg['simulator']['verilator']['warnings'] = ' '
@@ -118,6 +118,15 @@ cfg['simulator']['verilator']['warnings'] = ' '
 
 define['simulator']['verilator']['gui'] = 'MAKE_VARIABLE'
 cfg['simulator']['verilator']['gui'] = ''
+
+
+if logging:
+    cfg['simulator']['verilator']['options'] += ' --trace '
+else:
+    cfg['simulator']['verilator']['options'] += ' '
+
+#if buildonly:
+#    cfg['simulator']['verilator']['options'] += ' --lint-only  '
 
 #if logging:
 #    cfg['simulator']['verilator']['vvp_opt'] += ' +vcd '

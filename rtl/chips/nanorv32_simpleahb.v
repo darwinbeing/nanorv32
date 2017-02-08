@@ -621,159 +621,10 @@ module nanorv32_simpleahb (/*AUTOARG*/
    wire                           tap_debug_run_test_idle;
 
 
-   /* tap_top AUTO_TEMPLATE(
-    .tdo_pad_o        (tap_pad_tdo),
-    .tdo_padoe_o      (tap_pad_tdo_oe),
-    .tms_pad_i        (pad_tap_tms),
-    .tck_pad_i        (pad_tap_tck),
-    .tdi_pad_i        (pad_tap_tdi),
-    .trstn_pad_i      (rst_n), // ?? FIXME
-    // TAP state signals
-    .shift_dr_o       (tap_debug_shift_dr),
-    .pause_dr_o       (tap_debug_pause_dr),
-    .update_dr_o      (tap_debug_update_dr),
-    .capture_dr_o     (tap_debug_capture_dr),
-    .debug_select_o   (tap_debug_debug_select),
-
-    .debug_tdo_i      (debug_tap_tdo),
-    .tdi_o            (tap_debug_tdi),
-
-    .test_logic_reset_o(tap_debug_rst),
-
-    ); */
-   tap_top
-     U_TAP_TOP (
-                .run_test_idle_o        (), // For debug only
-                .bs_chain_tdo_i   (1'b0), // Boundary scan chain not used
-                .mbist_tdo_i      (1'b0),
-                // Unused
-
-                .extest_select_o(),
-                .sample_preload_select_o(),
-                .mbist_select_o(),
-                /*AUTOINST*/
-                // Outputs
-                .tdo_pad_o              (tap_pad_tdo),           // Templated
-                .tdo_padoe_o            (tap_pad_tdo_oe),        // Templated
-                .test_logic_reset_o     (tap_debug_rst),         // Templated
-                .shift_dr_o             (tap_debug_shift_dr),    // Templated
-                .pause_dr_o             (tap_debug_pause_dr),    // Templated
-                .update_dr_o            (tap_debug_update_dr),   // Templated
-                .capture_dr_o           (tap_debug_capture_dr),  // Templated
-                .debug_select_o         (tap_debug_debug_select), // Templated
-                .tdi_o                  (tap_debug_tdi),         // Templated
-                // Inputs
-                .tms_pad_i              (pad_tap_tms),           // Templated
-                .tck_pad_i              (pad_tap_tck),           // Templated
-                .trstn_pad_i            (rst_n),                 // Templated
-                .tdi_pad_i              (pad_tap_tdi),           // Templated
-                .debug_tdo_i            (debug_tap_tdo));         // Templated
-
 
    assign debug[5] = 0;
-
-
-
-
-
-
-   /* adbg_top AUTO_TEMPLATE(
-    .cpu0_\(.*\)_o  (),  // One cpu0 interface is used
-    .cpu0_\(.*\)_i  ({@"vl-width"{1'b0}}),  // One cpu0 interface is used
-
-    .cpu1\(.*\)_o  (),  // One cpu0 interface is used
-    .cpu1\(.*\)_i  ({@"vl-width"{1'b0}}),  // One cpu0 interface is used
-
-    .wb_jsp\(.*\)_i  ({@"vl-width"{1'b0}}),
-    .wb_jsp\(.*\)_o  (),
-
-    .wb_cti_o       (), // Classic transfert only
-    .wb_bte_o       (), // Burst type extension - not used
-    .wb_\(.*\)_o  (adbg_w2ahb_\1),  // One cpu0 interface is used
-    .wb_\(.*\)_i  (w2ahb_adbg_\1),  // One cpu0 interface is used
-    .wb_err_i       (1'b0),
-
-
-
-
-
-    .shift_dr_i     (tap_debug_shift_dr),
-    .pause_dr_i     (tap_debug_pause_dr),
-    .update_dr_i    (tap_debug_update_dr),
-    .capture_dr_i   (tap_debug_capture_dr),
-    .debug_select_i (tap_debug_debug_select),
-
-    .cpu0_clk_i     (clk),
-    .cpu1_clk_i     (clk),
-
-    .rst_i          (tap_debug_rst),
-
-    .int_o          (),
-
-    .tck_i          (pad_tap_tck),
-    .tdo_o          (debug_tap_tdo),
-    .tdi_i          (tap_debug_tdi),
-    ); */
-   adbg_top U_ADBG_TOP (
-                        .wb_clk_i       (clk),
-                        .wb_rst_i       (!rst_n),
-                        .cpu0_stall_o   (), // FIXME
-                        .cpu0_rst_o     (), // FIXME
-                        .wb_cab_o       (),
-                        /*AUTOINST*/
-                        // Outputs
-                        .tdo_o          (debug_tap_tdo),         // Templated
-                        .wb_adr_o       (adbg_w2ahb_adr),        // Templated
-                        .wb_dat_o       (adbg_w2ahb_dat),        // Templated
-                        .wb_cyc_o       (adbg_w2ahb_cyc),        // Templated
-                        .wb_stb_o       (adbg_w2ahb_stb),        // Templated
-                        .wb_sel_o       (adbg_w2ahb_sel),        // Templated
-                        .wb_we_o        (adbg_w2ahb_we),         // Templated
-                        .wb_cti_o       (),                      // Templated
-                        .wb_bte_o       (),                      // Templated
-                        .cpu0_addr_o    (),                      // Templated
-                        .cpu0_data_o    (),                      // Templated
-                        .cpu0_stb_o     (),                      // Templated
-                        .cpu0_we_o      (),                      // Templated
-                        .cpu1_addr_o    (),                      // Templated
-                        .cpu1_data_o    (),                      // Templated
-                        .cpu1_stall_o   (),                      // Templated
-                        .cpu1_stb_o     (),                      // Templated
-                        .cpu1_we_o      (),                      // Templated
-                        .cpu1_rst_o     (),                      // Templated
-                        .wb_jsp_dat_o   (),                      // Templated
-                        .wb_jsp_ack_o   (),                      // Templated
-                        .wb_jsp_err_o   (),                      // Templated
-                        .int_o          (),                      // Templated
-                        // Inputs
-                        .tck_i          (pad_tap_tck),           // Templated
-                        .tdi_i          (tap_debug_tdi),         // Templated
-                        .rst_i          (tap_debug_rst),         // Templated
-                        .shift_dr_i     (tap_debug_shift_dr),    // Templated
-                        .pause_dr_i     (tap_debug_pause_dr),    // Templated
-                        .update_dr_i    (tap_debug_update_dr),   // Templated
-                        .capture_dr_i   (tap_debug_capture_dr),  // Templated
-                        .debug_select_i (tap_debug_debug_select), // Templated
-                        .wb_dat_i       (w2ahb_adbg_dat),        // Templated
-                        .wb_ack_i       (w2ahb_adbg_ack),        // Templated
-                        .wb_err_i       (1'b0),                  // Templated
-                        .cpu0_clk_i     (clk),                   // Templated
-                        .cpu0_data_i    ({32{1'b0}}),            // Templated
-                        .cpu0_bp_i      ({1{1'b0}}),             // Templated
-                        .cpu0_ack_i     ({1{1'b0}}),             // Templated
-                        .cpu1_clk_i     (clk),                   // Templated
-                        .cpu1_data_i    ({32{1'b0}}),            // Templated
-                        .cpu1_bp_i      ({1{1'b0}}),             // Templated
-                        .cpu1_ack_i     ({1{1'b0}}),             // Templated
-                        .wb_jsp_adr_i   ({32{1'b0}}),            // Templated
-                        .wb_jsp_dat_i   ({32{1'b0}}),            // Templated
-                        .wb_jsp_cyc_i   ({1{1'b0}}),             // Templated
-                        .wb_jsp_stb_i   ({1{1'b0}}),             // Templated
-                        .wb_jsp_sel_i   ({4{1'b0}}),             // Templated
-                        .wb_jsp_we_i    ({1{1'b0}}),             // Templated
-                        .wb_jsp_cab_i   ({1{1'b0}}),             // Templated
-                        .wb_jsp_cti_i   ({3{1'b0}}),             // Templated
-                        .wb_jsp_bte_i   ({2{1'b0}}));             // Templated
+   assign tap_pad_tdo = 1'b0;
+   assign tap_pad_tdo_oe = 1'b0;
 
 
 
@@ -781,36 +632,8 @@ module nanorv32_simpleahb (/*AUTOARG*/
 
 
 
-    /* ahbmas_wbslv_top AUTO_TEMPLATE(
-
-     .data_i         (adbg_w2ahb_dat),
-     .data_o         (w2ahb_adbg_dat),
-     .clk_i          (clk),
-     .rst_i          (!rst_n),
-
-     .addr_i         (adbg_w2ahb_adr),
-     .\(.*\)_o  (w2ahb_adbg_\1),
-     .\(.*\)_i  (adbg_w2ahb_\1),
-
-     .hclk           (clk),
-     .hresetn        (rst_n),
-
-     .haddr          (w2ahb_ahb_haddr[NANORV32_DATA_MSB:0]),
-     .hwrite         (w2ahb_ahb_hwrite),
-     .hsize          (w2ahb_ahb_hsize[2:0]),
-     .hburst         (w2ahb_ahb_hburst[2:0]),
-     .hwdata         (w2ahb_ahb_hwdata[NANORV32_DATA_MSB:0]),
-     .htrans         (w2ahb_ahb_htrans[1:0]),
-
-
-     .hrdata         (ahb_w2ahb_hrdata[NANORV32_DATA_MSB:0]),
-     .hresp          ({1'b0,ahb_w2ahb_hresp}), // FIXME ??
-     .hready         (ahb_w2ahb_hready),
-     ); */
-
-    ahbmas_wbslv_top U_WB2AHB (
-        /*AUTOINST*/
-                               // Outputs
+   ahbmas_wbslv_top_dummy U_WB2AHB (
+                                    // Outputs
                                .haddr           (w2ahb_ahb_haddr[NANORV32_DATA_MSB:0]), // Templated
                                .hwrite          (w2ahb_ahb_hwrite), // Templated
                                .hsize           (w2ahb_ahb_hsize[2:0]), // Templated
@@ -833,6 +656,10 @@ module nanorv32_simpleahb (/*AUTOARG*/
                                .we_i            (adbg_w2ahb_we), // Templated
                                .clk_i           (clk),           // Templated
                                .rst_i           (!rst_n));        // Templated
+
+
+
+
 
 
 

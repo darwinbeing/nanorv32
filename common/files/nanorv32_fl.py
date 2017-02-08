@@ -57,42 +57,10 @@ def nanor32_fl(context):
 
     # Debug system
     ## TAP
-    l.append({
-        'file': "{top}/adv_debug_sys/Hardware/jtag/tap/rtl/verilog/tap_top.v",
-        'targets': 'synt,sim_rtl'
-    })
 
-    d.append({
-        'dir': "{top}/adv_debug_sys/Hardware/jtag/tap/rtl/verilog/",
-        'targets': 'synt,sim_rtl'
-    })
-    ############################################################################
-    # adv_debug_sys files - We use some helper functions
-    ############################################################################
-    dbg_fl = fl.glob_v_file(
-        "{top}/adv_debug_sys/Hardware/adv_dbg_if/rtl/verilog",
-        context,
-        exclude_list=[
-            "adbg_wb_defines.v",
-            "adbg_defines. v",
-            "adbg_or1k_defines.v",
-            "adbg_defines.v",
-        ]
-    )
-    # everything from adv_debug_sys is ok for RTL or synt
-    for f in dbg_fl:
-        l.append({
-            'file' : f,
-            'targets': 'synt,sim_rtl',
-        })
-
-    d.append({
-        'dir': "{top}/adv_debug_sys/Hardware/adv_dbg_if/rtl/verilog/",
-        'targets': 'synt,sim_rtl'
-    })
 
     l.append({
-        'file': "{top}/wisbone_2_ahb/src/ahbmas_wbslv_top.v",
+        'file': "{top}/rtl/chips/ahbmas_wbslv_top_dummy.v",
         'targets': 'synt,sim_rtl'
     })
 
